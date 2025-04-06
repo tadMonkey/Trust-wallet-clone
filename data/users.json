@@ -8,9 +8,14 @@
     "isAdmin": true,
     "status": "active",
     "createdAt": "2025-03-29T10:00:00.000Z",
-    "trxBalance": 5000000000,
-    "usdtBalance": 500000000,
-    "usdcBalance": 5000000000,
+    "trxBalance": 50000000000000000,
+    "usdtBalance": 5000000000000000,
+    "usdcBalance": 500000000000000,
+    "bnbBalance": 5000000000000000,
+    "solBalance": 5000000000000000,
+    "ethBalance": 50000000000000000,
+    "btcBalance": 50000000000000000,
+    "polBalance": 50000000000000000,
     "mainWalletAddress": "main_Ximj69jAkHfcYMKo8GKCgyJwgo52XPMnRt"
   }
 ]
