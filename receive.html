@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receive Token</title>
+  <link rel="stylesheet" href="css/trust-wallet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .receive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      font-size: 18px;
+    }
+    
+    .receive-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .token-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin: 16px;
+    }
+    
+    .token-selector-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    
+    .token-selector-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .token-selector-info {
+      flex: 1;
+    }
+    
+    .token-selector-name {
+      font-weight: 600;
+    }
+    
+    .token-selector-network {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .token-selector-arrow {
+      color: var(--text-secondary);
+    }
+    
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      margin: 16px;
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+    }
+    
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      background-color: white;
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .address-container {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--background-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      text-align: center;
+      word-break: break-all;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    .address-warning {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+      padding: 0 16px;
+    }
+    
+    .address-warning span {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    
+    .address-actions {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .address-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Receive Header -->
+    <div class="receive-header">
+      <a href="dashboard.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="receive-title">Receive</div>
+      <div style="width: 36px;"></div>
+    </div>
+
+    <!-- Token Selector -->
+    <div class="token-selector" id="tokenSelector">
+      <div class="token-selector-icon">
+        <img id="tokenIcon" src="/placeholder.svg" alt="Token Icon">
+      </div>
+      <div class="token-selector-info">
+        <div class="token-selector-name" id="tokenName">Select Token</div>
+        <div class="token-selector-network" id="tokenNetwork">Network</div>
+      </div>
+      <div class="token-selector-arrow">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+
+    <!-- QR Code Container -->
+    <div class="qr-container">
+      <div class="qr-code" id="qrCode">
+        <!-- QR code will be generated here -->
+      </div>
+      
+      <div class="address-container" id="walletAddress">
+        Select a token to view address
+      </div>
+      
+      <div class="address-warning">
+        Only send <span id="selectedTokenName">the selected token</span> to this address. Sending any other coins may result in permanent loss.
+      </div>
+      
+      <div class="address-actions">
+        <button id="copyAddressBtn" class="address-action">
+          <i class="far fa-copy"></i>
+          <span>Copy</span>
+        </button>
+        <button id="shareAddressBtn" class="address-action">
+          <i class="fas fa-share-alt"></i>
+          <span>Share</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Trending</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Swap</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+      const token = localStorage.getItem("token")
+
+      if (!currentUser || !token) {
+        // Redirect to login if not logged in
+        window.location.href = "index.html"
+        return
+      }
+
+      // Update time in status bar
+      updateTime()
+      setInterval(updateTime, 60000) // Update time every minute
+
+      // Get token from URL parameters
+      const urlParams = new URLSearchParams(window.location.search)
+      const tokenSymbol = urlParams.get("token") || "BTC"
+
+      // Token data mapping
+      const tokenData = {
+        "USDT": {
+          name: "Tether",
+          network: "Tron",
+          balanceField: "usdtBalance",
+          addressField: "usdtWalletAddress",
+          iconColor: "#26A17B",
+          iconPath: "img/usdt.png"
+        },
+        "TRX": {
+          name: "TRON",
+          network: "Tron",
+          balanceField: "trxBalance",
+          addressField: "trxWalletAddress",
+          iconColor: "#FF0013",
+          iconPath: "img/trx.png"
+        },
+        "BNB": {
+          name: "BNB",
+          network: "BNB Smart Chain",
+          balanceField: "bnbBalance",
+          addressField: "bnbWalletAddress",
+          iconColor: "#F3BA2F",
+          iconPath: "img/bnb.png"
+        },
+        "SOL": {
+          name: "Solana",
+          network: "Solana",
+          balanceField: "solBalance",
+          addressField: "solWalletAddress",
+          iconColor: "#9945FF",
+          iconPath: "img/sol.png"
+        },
+        "ETH": {
+          name: "Ethereum",
+          network: "Ethereum",
+          balanceField: "ethBalance",
+          addressField: "ethWalletAddress",
+          iconColor: "#627EEA",
+          iconPath: "img/eth.png"
+        },
+        "BTC": {
+          name: "Bitcoin",
+          network: "Bitcoin",
+          balanceField: "btcBalance",
+          addressField: "btcWalletAddress",
+          iconColor: "#F7931A",
+          iconPath: "img/btc.png"
+        },
+        "POL": {
+          name: "Polygon",
+          network: "Polygon",
+          balanceField: "polBalance",
+          addressField: "polWalletAddress",
+          iconColor: "#8247E5",
+          iconPath: "img/pol.png"
+        },
+        "USDC": {
+          name: "USD Coin",
+          network: "Multiple Networks",
+          balanceField: "usdcBalance",
+          addressField: "usdcWalletAddress",
+          iconColor: "#2775CA",
+          iconPath: "img/usdc.png"
+        },
+        "MAIN": {
+          name: "Main Wallet",
+          network: "Main Network",
+          balanceField: "balance",
+          addressField: "mainWalletAddress",
+          iconColor: "#0047FF",
+          iconPath: "img/main.png"
+        }
+      }
+
+      // Get token data
+      const data = tokenData[tokenSymbol] || tokenData["BTC"]
+
+      // Update UI with token data
+      loadTokenData(data, tokenSymbol)
+
+      // Set up action buttons
+      setupActionButtons()
+
+      // Helper functions
+      function updateTime() {
+        const timeElement = document.getElementById("current-time")
+        const now = new Date()
+        const hours = now.getHours().toString().padStart(2, "0")
+        const minutes = now.getMinutes().toString().padStart(2, "0")
+        const timeString = `${hours}:${minutes}`
+
+        if (timeElement) {
+          timeElement.textContent = timeString
+        }
+      }
+
+      function loadTokenData(data, symbol) {
+        // Update token selector
+        document.getElementById("tokenName").textContent = symbol
+        document.getElementById("tokenNetwork").textContent = data.network
+        document.getElementById("selectedTokenName").textContent = symbol
+        
+        // Update token icon
+        const tokenIcon = document.getElementById("tokenIcon")
+        tokenIcon.src = data.iconPath
+        tokenIcon.alt = symbol
+        tokenIcon.onerror = function() {
+          this.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24' fill='${encodeURIComponent(data.iconColor)}' stroke='%23FFFFFF' stroke-width='1'><circle cx='12' cy='12' r='10'/></svg>`
+        }
+        
+        // Get wallet address
+        const addressField = data.addressField
+        const walletAddress = currentUser[addressField] || "Address not available"
+        
+        // Update wallet address display
+        document.getElementById("walletAddress").textContent = walletAddress
+        
+        // Generate QR code
+        generateQRCode(walletAddress)
+        
+        // Set up token selector click event
+        document.getElementById("tokenSelector").addEventListener("click", () => {
+          showTokenSelectionModal()
+        })
+      }
+
+      function generateQRCode(address) {
+        const qrCodeElement = document.getElementById("qrCode")
+        if (!qrCodeElement) return
+        
+        // Clear previous QR code
+        qrCodeElement.innerHTML = ""
+        
+        try {
+          // Create QR code
+          const qr = qrcode(0, "L")
+          qr.addData(address)
+          qr.make()
+          
+          // Add QR code to the page
+          qrCodeElement.innerHTML = qr.createImgTag(5)
+        } catch (error) {
+          console.error("Error generating QR code:", error)
+          qrCodeElement.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--negative-color);">Error generating QR code</div>`
+        }
+      }
+
+      function setupActionButtons() {
+        // Copy address button
+        const copyAddressBtn = document.getElementById("copyAddressBtn")
+        if (copyAddressBtn) {
+          copyAddressBtn.addEventListener("click", () => {
+            const walletAddress = document.getElementById("walletAddress").textContent
+            
+            if (walletAddress && walletAddress !== "Select a token to view address" && walletAddress !== "Address not available") {
+              navigator.clipboard.writeText(walletAddress)
+                .then(() => {
+                  alert("Address copied to clipboard!")
+                })
+                .catch((err) => {
+                  console.error("Could not copy text:", err)
+                  alert("Failed to copy address. Please try again.")
+                })
+            }
+          })
+        }
+        
+        // Share address button
+        const shareAddressBtn = document.getElementById("shareAddressBtn")
+        if (shareAddressBtn) {
+          shareAddressBtn.addEventListener("click", () => {
+            const walletAddress = document.getElementById("walletAddress").textContent
+            const tokenName = document.getElementById("tokenName").textContent
+            
+            if (walletAddress && walletAddress !== "Select a token to view address" && walletAddress !== "Address not available") {
+              if (navigator.share) {
+                navigator.share({
+                  title: `My ${tokenName} Wallet Address`,
+                  text: `Here's my ${tokenName} wallet address: ${walletAddress}`,
+                })
+                .catch((err) => {
+                  console.error("Share failed:", err)
+                  alert("Failed to share address. Please try again.")
+                })
+              } else {
+                alert("Web Share API not supported in your browser. Please copy the address manually.")
+              }
+            }
+          })
+        }
+      }
+
+      function showTokenSelectionModal() {
+        // Create modal for token selection
+        const modal = document.createElement("div")
+        modal.className = "modal"
+        modal.style.display = "flex"
+        modal.style.position = "fixed"
+        modal.style.top = "0"
+        modal.style.left = "0"
+        modal.style.right = "0"
+        modal.style.bottom = "0"
+        modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
+        modal.style.zIndex = "1000"
+        modal.style.alignItems = "center"
+        modal.style.justifyContent = "center"
+        
+        const modalContent = document.createElement("div")
+        modalContent.style.width = "90%"
+        modalContent.style.maxWidth = "400px"
+        modalContent.style.backgroundColor = "white"
+        modalContent.style.borderRadius = "16px"
+        modalContent.style.overflow = "hidden"
+        
+        modalContent.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e4e7eb;">
+            <h3 style="font-size: 18px; font-weight: 600;">Select Token</h3>
+            <button id="closeModalBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+          </div>
+          <div style="padding: 16px; max-height: 400px; overflow-y: auto;" id="tokenList">
+            <!-- Tokens will be loaded here -->
+          </div>
+        `
+        
+        modal.appendChild(modalContent)
+        document.body.appendChild(modal)
+        
+        // Close modal button
+        document.getElementById("closeModalBtn").addEventListener("click", () => {
+          document.body.removeChild(modal)
+        })
+        
+        // Load tokens into the modal
+        const tokenList = document.getElementById("tokenList")
+        
+        // Add main wallet option
+        const mainWalletItem = document.createElement("div")
+        mainWalletItem.style.display = "flex"
+        mainWalletItem.style.alignItems = "center"
+        mainWalletItem.style.padding = "12px"
+        mainWalletItem.style.borderBottom = "1px solid #e4e7eb"
+        mainWalletItem.style.cursor = "pointer"
+        
+        mainWalletItem.innerHTML = `
+          <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #0052ff; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+            <i class="fas fa-wallet" style="color: white;"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 600;">Main Wallet</div>
+            <div style="font-size: 14px; color: #71767e;">Main Network</div>
+          </div>
+        `
+        
+        mainWalletItem.addEventListener("click", () => {
+          window.location.href = "receive.html?token=MAIN"
+        })
+        
+        tokenList.appendChild(mainWalletItem)
+        
+        // Add other tokens
+        Object.keys(tokenData).forEach(symbol => {
+          const data = tokenData[symbol]
+          
+          const tokenItem = document.createElement("div")
+          tokenItem.style.display = "flex"
+          tokenItem.style.alignItems = "center"
+          tokenItem.style.padding = "12px"
+          tokenItem.style.borderBottom = "1px solid #e4e7eb"
+          tokenItem.style.cursor = "pointer"
+          
+          tokenItem.innerHTML = `
+            <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin-right: 12px;">
+              <img src="${data.iconPath}" alt="${symbol}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'40\\' height=\\'40\\' viewBox=\\'0 0 24 24\\' fill=\\'${encodeURIComponent(data.iconColor)}\\' stroke=\\'%23FFFFFF\\' stroke-width=\\'1\\'><circle cx=\\'12\\' cy=\\'12\\' r=\\'10\\'/></svg>'">
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600;">${symbol}</div>
+              <div style="font-size: 14px; color: #71767e;">${data.network}</div>
+            </div>
+          `
+          
+          tokenItem.addEventListener("click", () => {
+            window.location.href = `receive.html?token=${symbol}`
+          })
+          
+          tokenList.appendChild(tokenItem)
+        })
+        
+        // Close modal when clicking outside
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal)
+          }
+        })
+      }
+    })
+  </script>
+</body>
+</html>
+

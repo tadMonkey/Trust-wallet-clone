@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trust Wallet - Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3375BB;
+      --primary-gradient: linear-gradient(135deg, #3375BB, #2B5ECE);
+      --background-color: #0E1121;
+      --card-color: #1A1F36;
+      --text-color: #FFFFFF;
+      --text-secondary: #8A94A6;
+      --border-color: #2D3348;
+      --success-color: #05C46B;
+      --error-color: #FF3B30;
+      --warning-color: #FFCC00;
+      --border-radius: 16px;
+      --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background-color: var(--background-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .admin-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 20px;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+      box-shadow: var(--box-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .admin-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .admin-title i {
+      font-size: 24px;
+    }
+    
+    .admin-title h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .admin-actions {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .theme-btn,
+    .logout-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .theme-btn:hover,
+    .logout-btn:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .admin-balance-card {
+      margin: 20px;
+      padding: 24px;
+      background: var(--card-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .admin-balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-balance-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .admin-balance-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .admin-balance-actions button {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(51, 117, 187, 0.1);
+      border-radius: 50%;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .admin-balance-actions button:hover {
+      background-color: rgba(51, 117, 187, 0.2);
+    }
+    
+    .admin-balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 16px;
+    }
+    
+    .admin-token-balances {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .token-balance {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: rgba(51, 117, 187, 0.1);
+      border-radius: 12px;
+    }
+    
+    .token-name {
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+    
+    .token-value {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .admin-actions-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      padding: 0 20px;
+      margin-bottom: 30px;
+    }
+    
+    .admin-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      transition: all 0.3s ease;
+    }
+    
+    .admin-action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .admin-action-btn i {
+      font-size: 24px;
+      color: var(--primary-color);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(51, 117, 187, 0.1);
+      border-radius: 50%;
+    }
+    
+    .admin-action-btn span {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    
+    .admin-tabs {
+      padding: 0 20px;
+    }
+    
+    .tabs {
+      display: flex;
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 5px;
+      margin-bottom: 20px;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      border-radius: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    
+    .tab-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+      margin-bottom: 80px;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .search-container {
+      margin-bottom: 20px;
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    
+    .input-with-icon i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+    
+    .search-input input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      font-size: 16px;
+    }
+    
+    .search-input input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    .users-list,
+    .wallets-list,
+    .admin-transactions {
+      margin-top: 20px;
+    }
+    
+    .user-item {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .user-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    
+    .user-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .user-email,
+    .user-balance {
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+    
+    .user-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    
+    .status-active {
+      background-color: rgba(5, 196, 107, 0.1);
+      color: var(--success-color);
+    }
+    
+    .status-inactive {
+      background-color: rgba(255, 59, 48, 0.1);
+      color: var(--error-color);
+    }
+    
+    .user-wallets {
+      background-color: rgba(51, 117, 187, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .user-wallets div {
+      margin-bottom: 8px;
+    }
+    
+    .user-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: flex-end;
+    }
+    
+    .user-action-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(51, 117, 187, 0.1);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+    
+    .user-action-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .user-action-btn.edit {
+      color: var(--primary-color);
+    }
+    
+    .user-action-btn.delete {
+      color: var(--error-color);
+    }
+    
+    .transaction-item {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--box-shadow);
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .transaction-info {
+      flex: 1;
+    }
+    
+    .transaction-details h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 8px;
+    }
+    
+    .transaction-date {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .transaction-type {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background-color: rgba(51, 117, 187, 0.1);
+      color: var(--primary-color);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .transaction-parties {
+      background-color: rgba(51, 117, 187, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      width: 100%;
+    }
+    
+    .transaction-parties div {
+      margin-bottom: 8px;
+    }
+    
+    .transaction-meta {
+      text-align: right;
+      margin-left: 20px;
+    }
+    
+    .transaction-amount {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 8px;
+    }
+    
+    .transaction-status {
+      color: var(--success-color);
+      font-size: 14px;
+    }
+    
+    .wallet-item {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--box-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .wallet-info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    
+    .wallet-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgba(51, 117, 187, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      color: var(--primary-color);
+      font-size: 20px;
+    }
+    
+    .wallet-details {
+      flex: 1;
+    }
+    
+    .wallet-type {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 8px;
+    }
+    
+    .wallet-address {
+      color: var(--text-secondary);
+      font-size: 14px;
+      word-break: break-all;
+    }
+    
+    .wallet-balance {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      width: 90%;
+      max-width: 400px;
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: rgba(51, 117, 187, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      font-size: 16px;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    .select-wrapper {
+      position: relative;
+    }
+    
+    .select-wrapper select {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: rgba(51, 117, 187, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      font-size: 16px;
+      appearance: none;
+    }
+    
+    .select-wrapper i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+    
+    .form-error {
+      color: var(--error-color);
+      font-size: 14px;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(51, 117, 187, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(51, 117, 187, 0.4);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(51, 117, 187, 0.05);
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    .receipt {
+      background-color: rgba(51, 117, 187, 0.05);
+      border-radius: var(--border-radius);
+      padding: 24px;
+    }
+    
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .receipt-logo {
+      font-size: 36px;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    
+    .receipt-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 5px;
+    }
+    
+    .receipt-subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .receipt-details {
+      margin-bottom: 20px;
+    }
+    
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .receipt-label {
+      color: var(--text-secondary);
+    }
+    
+    .receipt-value {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    
+    .receipt-amount {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .receipt-amount-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+    
+    .receipt-footer {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      background-color: var(--card-color);
+      padding: 12px 0;
+      border-top: 1px solid var(--border-color);
+      z-index: 100;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      width: 20%;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      color: var(--primary-color);
+    }
+    
+    .nav-item i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    
+    .nav-item span {
+      font-size: 12px;
+    }
+    
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+      color: var(--primary-color);
+    }
+    
+    .loading-spinner i {
+      font-size: 40px;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-secondary);
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="admin-header">
+      <div class="admin-title">
+        <i class="fas fa-shield-alt"></i>
+        <h1>Admin Dashboard</h1>
+      </div>
+      <div class="admin-actions">
+        <button id="darkModeToggleAdmin" class="theme-btn">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button id="logoutBtnAdmin" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-balance-card">
+      <div class="admin-balance-header">
+        <h3>Admin Balance</h3>
+        <div class="admin-balance-actions">
+          <button id="refreshBalanceBtn" class="refresh-btn">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+          <button id="hideBalanceBtn" class="visibility-btn">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="admin-balance-amount" id="adminBalanceAmount">$500,000,000.00</div>
+      <div class="admin-token-balances">
+        <div class="token-balance">
+          <span class="token-name">TRX:</span>
+          <span class="token-value" id="adminTrxBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">USDT:</span>
+          <span class="token-value" id="adminUsdtBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">USDC:</span>
+          <span class="token-value" id="adminUsdcBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">BNB:</span>
+          <span class="token-value" id="adminBnbBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">SOL:</span>
+          <span class="token-value" id="adminSolBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">ETH:</span>
+          <span class="token-value" id="adminEthBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">BTC:</span>
+          <span class="token-value" id="adminBtcBalance">500,000,000.00</span>
+        </div>
+        <div class="token-balance">
+          <span class="token-name">POL:</span>
+          <span class="token-value" id="adminPolBalance">500,000,000.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-actions-container">
+      <button id="fundUserBtn" class="admin-action-btn">
+        <i class="fas fa-paper-plane"></i>
+        <span>Fund User</span>
+      </button>
+      <button id="fundMainAccountBtn" class="admin-action-btn">
+        <i class="fas fa-wallet"></i>
+        <span>Fund Main Account</span>
+      </button>
+      <button id="viewUsersBtn" class="admin-action-btn">
+        <i class="fas fa-users"></i>
+        <span>View Users</span>
+      </button>
+      <button id="viewTransactionsBtn" class="admin-action-btn">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transactions</span>
+      </button>
+    </div>
+
+    <div class="admin-tabs">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="transactions">Transactions</button>
+        <button class="tab-btn" data-tab="wallets">Wallets</button>
+      </div>
+    </div>
+
+    <div class="tab-content active" id="users-tab">
+      <div class="search-container">
+        <div class="input-with-icon search-input">
+          <i class="fas fa-search"></i>
+          <input type="search" id="userSearch" placeholder="Search users...">
+        </div>
+      </div>
+      
+      <div class="users-list" id="usersList">
+        <!-- Users will be loaded here -->
+        <div class="loading-spinner" id="usersLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      </div>
+      
+      <div id="noUsers" class="no-data hidden">
+        <p>No users found</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="transactions-tab">
+      <div class="search-container">
+        <div class="input-with-icon search-input">
+          <i class="fas fa-search"></i>
+          <input type="search" id="transactionSearch" placeholder="Search transactions...">
+        </div>
+      </div>
+      
+      <div class="transactions-list admin-transactions" id="adminTransactionsList">
+        <!-- Transactions will be loaded here -->
+        <div class="loading-spinner" id="adminTransactionsLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      </div>
+      
+      <div id="noAdminTransactions" class="no-data hidden">
+        <p>No transactions found</p>
+      </div>
+    </div>
+
+    <div class="tab-content" id="wallets-tab">
+      <div class="search-container">
+        <div class="input-with-icon search-input">
+          <i class="fas fa-search"></i>
+          <input type="search" id="walletSearch" placeholder="Search wallets...">
+        </div>
+      </div>
+      
+      <div class="wallets-list" id="adminWalletsList">
+        <!-- Wallets will be loaded here -->
+        <div class="loading-spinner" id="walletsLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      </div>
+      
+      <div id="noWallets" class="no-data hidden">
+        <p>No wallets found</p>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="admin.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item" id="adminFundBtn">
+        <i class="fas fa-paper-plane"></i>
+        <span>Fund</span>
+      </a>
+      <a href="#" class="nav-item" id="adminUsersBtn">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="#" class="nav-item" id="adminSettingsBtn">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Fund User Modal -->
+  <div class="modal" id="fundUserModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Fund User</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="fundUserForm">
+          <div class="form-group">
+            <label for="recipientAddress">Recipient Wallet Address</label>
+            <div class="input-with-icon">
+              <i class="fas fa-wallet"></i>
+              <input type="text" id="recipientAddress" class="form-input" placeholder="Enter wallet address" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="fundAmount">Amount</label>
+            <div class="input-with-icon">
+              <i class="fas fa-dollar-sign"></i>
+              <input type="number" id="fundAmount" class="form-input" min="0.01" step="0.01" placeholder="0.00" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="tokenType">Token</label>
+            <div class="select-wrapper">
+              <select id="tokenType" class="form-input" required>
+                <option value="TRX">TRX</option>
+                <option value="USDT">USDT</option>
+                <option value="USDC">USDC</option>
+                <option value="BNB">BNB</option>
+                <option value="SOL">SOL</option>
+                <option value="ETH">ETH</option>
+                <option value="BTC">BTC</option>
+                <option value="POL">POL</option>
+              </select>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          
+          <div class="form-error" id="fundError"></div>
+          
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-paper-plane"></i> Fund User
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fund Main Account Modal -->
+  <div class="modal" id="fundMainAccountModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Fund Main Account</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="fundMainAccountForm">
+          <div class="form-group">
+            <label for="mainAccountAddress">Main Wallet Address</label>
+            <div class="input-with-icon">
+              <i class="fas fa-wallet"></i>
+              <input type="text" id="mainAccountAddress" class="form-input" placeholder="Enter main wallet address" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="mainAmount">Amount</label>
+            <div class="input-with-icon">
+              <i class="fas fa-dollar-sign"></i>
+              <input type="number" id="mainAmount" class="form-input" min="0.01" step="0.01" placeholder="0.00" required>
+            </div>
+          </div>
+          
+          <div class="form-error" id="mainFundError"></div>
+          
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-paper-plane"></i> Fund Main Account
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Edit Modal -->
+  <div class="modal" id="userEditModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit User</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <input type="hidden" id="editUserId">
+          <div class="form-group">
+            <label for="editUserName">Name</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="editUserName" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editUserEmail">Email</label>
+            <div class="input-with-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="editUserEmail" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editUserStatus">Status</label>
+            <div class="select-wrapper">
+              <select id="editUserStatus" class="form-input" required>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="form-error" id="editUserError"></div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction Receipt Modal -->
+  <div class="modal" id="receiptModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Transaction Receipt</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="receipt" id="receiptContent">
+          <!-- Receipt content will be loaded here -->
+        </div>
+        <button id="printReceiptBtn" class="btn btn-outline btn-block">
+          <i class="fas fa-print"></i> Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
+

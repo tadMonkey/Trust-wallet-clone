@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Detail</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --background-color: #ffffff;
+      --card-color: #f5f7fa;
+      --text-color: #000000;
+      --text-secondary: #71767e;
+      --border-color: #e4e7eb;
+      --positive-color: #0052ff;
+      --negative-color: #ea3943;
+      --button-bg: #f5f5f5;
+      --border-radius: 16px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+    
+    .app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background-color: var(--background-color);
+    }
+    
+    /* Status Bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+    }
+    
+    .time {
+      font-weight: 600;
+    }
+    
+    .status-center {
+      background-color: #000;
+      border-radius: 30px;
+      padding: 4px 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .status-icon {
+      color: #00FF41;
+    }
+    
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    /* Token Header */
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+    }
+    
+    .back-button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      font-size: 24px;
+    }
+    
+    .token-title {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .token-name {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .token-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .header-action {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+    }
+    
+    /* Token Info */
+    .token-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+    
+    .token-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 24px;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .token-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .token-balance {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .token-value {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 16px 24px;
+    }
+    
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .action-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background-color: var(--button-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .action-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    /* Earn Card */
+    .earn-card {
+      margin: 0 16px 24px;
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .earn-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .earn-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .earn-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .earn-text h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .earn-text p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    /* Transaction History */
+    .transaction-history {
+      padding: 0 16px;
+    }
+    
+    .date-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 16px;
+      color: var(--text-color);
+    }
+    
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--card-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+    
+    .transaction-info {
+      flex: 1;
+    }
+    
+    .transaction-type {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .transaction-address {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .transaction-amount {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .transaction-amount.positive {
+      color: var(--positive-color);
+    }
+    
+    .transaction-amount.negative {
+      color: var(--negative-color);
+    }
+    
+    /* Explorer Link */
+    .explorer-link {
+      text-align: center;
+      padding: 24px 0;
+    }
+    
+    .explorer-link a {
+      color: var(--positive-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* Price Section */
+    .price-section {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .price-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .price-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .current-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .price-value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .price-change {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .price-change.negative {
+      color: var(--negative-color);
+    }
+    
+    .price-change.positive {
+      color: var(--positive-color);
+    }
+    
+    .price-chart {
+      width: 80px;
+      height: 30px;
+    }
+    
+    .price-chart img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      background-color: var(--background-color);
+      padding: 10px 0;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-secondary);
+    }
+    
+    .nav-item.active {
+      color: var(--positive-color);
+    }
+    
+    .nav-item i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    
+    .nav-item span {
+      font-size: 12px;
+    }
+    
+    /* Home Indicator */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: #000;
+      border-radius: 100px;
+      margin: 8px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Token Header -->
+    <div class="token-header">
+      <a href="dashboard.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="token-title">
+        <div class="token-name" id="tokenSymbol">SOL</div>
+        <div class="token-subtitle">COIN <span id="tokenName">Solana</span></div>
+      </div>
+      <div class="header-actions">
+        <div class="header-action">
+          <i class="fas fa-bell-slash"></i>
+        </div>
+        <div class="header-action">
+          <i class="fas fa-info-circle"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Token Info -->
+    <div class="token-info">
+      <div class="token-logo" id="tokenLogo">
+        <img src="img/sol.png" alt="SOL" id="tokenImage">
+      </div>
+      <div class="token-balance" id="tokenBalance">0.00720168 SOL</div>
+      <div class="token-value" id="tokenValue">≈ $0.84</div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="send.html" class="action-btn" id="sendBtn">
+        <div class="action-icon">
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <div class="action-label">Send</div>
+      </a>
+      <a href="receive.html" class="action-btn" id="receiveBtn">
+        <div class="action-icon">
+          <i class="fas fa-arrow-down"></i>
+        </div>
+        <div class="action-label">Receive</div>
+      </a>
+      <div class="action-btn" id="fundMainBtn">
+        <div class="action-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
+        <div class="action-label">Fund from Main</div>
+      </div>
+      <div class="action-btn" id="swapBtn">
+        <div class="action-icon">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        <div class="action-label">Swap</div>
+      </div>
+      <div class="action-btn" id="sellBtn">
+        <div class="action-icon">
+          <i class="fas fa-university"></i>
+        </div>
+        <div class="action-label">Sell</div>
+      </div>
+    </div>
+    
+    <!-- Earn Card -->
+    <div class="earn-card">
+      <div class="earn-info">
+        <div class="earn-icon">
+          <img src="img/earn.png" alt="Earn Icon">
+        </div>
+        <div class="earn-text">
+          <h3>Start earning</h3>
+          <p>Start earning on your <span id="earnTokenSymbol">SOL</span></p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right"></i>
+    </div>
+    
+    <!-- Transaction History -->
+    <div class="transaction-history" id="transactionHistory">
+      <!-- Transactions will be loaded here -->
+    </div>
+
+    <!-- Explorer Link -->
+    <div class="explorer-link">
+      <a href="#" id="viewMoreLink">View more transactions</a>
+      <br><br>
+      <a href="#" id="explorerLink">Can't find your transaction? Check explorer</a>
+    </div>
+    
+    <!-- Price Section -->
+    <div class="price-section">
+      <div class="price-header" id="priceHeader">Current SOL price</div>
+      <div class="price-info">
+        <div class="current-price">
+          <div class="price-value" id="currentPrice">$117.76</div>
+          <div class="price-change negative" id="priceChange">-2.05%</div>
+        </div>
+        <div class="price-chart">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAzMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PHBhdGggZD0iTTAgMTVDNSAxMCAxMCAyMCAxNSAxNUMyMCAxMCAyNSAyMCAzMCAxNUM0MCAxMCA1MCAyMCA2MCAxNUM3MCAxMCA3NSAyMCA4MCAxNSIgc3Ryb2tlPSIjZWEzOTQzIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4=" alt="Price Chart" id="priceChart">
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Trending</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Swap</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-compass"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+    
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+      const token = localStorage.getItem("token")
+
+      if (!currentUser || !token) {
+        // Redirect to login if not logged in
+        window.location.href = "index.html"
+        return
+      }
+
+      // Update time in status bar
+      updateTime()
+      setInterval(updateTime, 60000) // Update time every minute
+
+      // Get token from URL parameters
+      const urlParams = new URLSearchParams(window.location.search)
+      const tokenSymbol = urlParams.get("token") || "SOL"
+
+      // Token data mapping
+      const tokenData = {
+        "USDT": {
+          name: "Tether",
+          price: 1.06,
+          change: 0.77,
+          balanceField: "usdtBalance",
+          iconColor: "#26A17B",
+          iconPath: "img/usdt.png",
+          network: "Tron"
+        },
+        "TRX": {
+          name: "TRON",
+          price: 0.23,
+          change: -1.10,
+          balanceField: "trxBalance",
+          iconColor: "#FF0013",
+          iconPath: "img/trx.png",
+          network: "Tron"
+        },
+        "BNB": {
+          name: "BNB",
+          price: 593.37,
+          change: -0.05,
+          balanceField: "bnbBalance",
+          iconColor: "#F3BA2F",
+          iconPath: "img/bnb.png",
+          network: "BNB Smart Chain"
+        },
+        "SOL": {
+          name: "Solana",
+          price: 117.76,
+          change: -2.05,
+          balanceField: "solBalance",
+          iconColor: "#9945FF",
+          iconPath: "img/sol.png",
+          network: "Solana"
+        },
+        "ETH": {
+          name: "Ethereum",
+          price: 1788.83,
+          change: -0.75,
+          balanceField: "ethBalance",
+          iconColor: "#627EEA",
+          iconPath: "img/eth.png",
+          network: "Ethereum"
+        },
+        "BTC": {
+          name: "Bitcoin",
+          price: 82816.21,
+          change: -0.22,
+          balanceField: "btcBalance",
+          iconColor: "#F7931A",
+          iconPath: "img/btc.png",
+          network: "Bitcoin"
+        },
+        "POL": {
+          name: "Polygon",
+          price: 0.18,
+          change: -1.65,
+          balanceField: "polBalance",
+          iconColor: "#8247E5",
+          iconPath: "img/pol.png",
+          network: "Polygon"
+        },
+        "USDC": {
+          name: "USD Coin",
+          price: 1.00,
+          change: 0.01,
+          balanceField: "usdcBalance",
+          iconColor: "#2775CA",
+          iconPath: "img/usdc.png",
+          network: "Multiple"
+        }
+      }
+
+      // Get token data
+      const data = tokenData[tokenSymbol] || tokenData["SOL"]
+
+      // Update UI with token data
+      updateTokenUI(data, tokenSymbol)
+
+      // Load token transactions
+      loadTokenTransactions(tokenSymbol)
+
+      // Set up action buttons
+      setupActionButtons(tokenSymbol)
+
+      // Helper functions
+      function updateTime() {
+        const timeElement = document.getElementById("current-time")
+        const now = new Date()
+        const hours = now.getHours().toString().padStart(2, "0")
+        const minutes = now.getMinutes().toString().padStart(2, "0")
+        const timeString = `${hours}:${minutes}`
+
+        if (timeElement) {
+          timeElement.textContent = timeString
+        }
+      }
+
+      function updateTokenUI(data, symbol) {
+        // Update token header
+        document.getElementById("tokenSymbol").textContent = symbol
+        document.getElementById("tokenName").textContent = data.name
+        document.getElementById("earnTokenSymbol").textContent = symbol
+        
+        // Update token logo
+        const tokenImage = document.getElementById("tokenImage")
+        tokenImage.src = data.iconPath
+        tokenImage.alt = symbol
+        tokenImage.onerror = function() {
+          this.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 24 24' fill='${encodeURIComponent(data.iconColor)}' stroke='%23FFFFFF' stroke-width='1'><circle cx='12' cy='12' r='10'/></svg>`
+        }
+        
+        // Update token balance
+        const balanceField = data.balanceField
+        const balance = currentUser[balanceField] || 0
+        document.getElementById("tokenBalance").textContent = `${balance} ${symbol}`
+        
+        // Update token value
+        const value = balance * data.price
+        document.getElementById("tokenValue").textContent = `≈ $${value.toFixed(2)}`
+        
+        // Update price section
+        document.getElementById("priceHeader").textContent = `Current ${symbol} price`
+        document.getElementById("currentPrice").textContent = `$${data.price.toFixed(2)}`
+        
+        const priceChangeElement = document.getElementById("priceChange")
+        priceChangeElement.textContent = `${data.change >= 0 ? '+' : ''}${data.change}%`
+        
+        if (data.change >= 0) {
+          priceChangeElement.classList.remove("negative")
+          priceChangeElement.classList.add("positive")
+          document.getElementById("priceChart").src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAzMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PHBhdGggZD0iTTAgMTVDNSAyMCAxMCAxMCAxNSAxNUMyMCAyMCAyNSAxMCAzMCAxNUM0MCAyMCA1MCAxMCA2MCAxNUM3MCAyMCA3NSAxMCA4MCAxNSIgc3Ryb2tlPSIjMDA1MmZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4="
+        } else {
+          priceChangeElement.classList.remove("positive")
+          priceChangeElement.classList.add("negative")
+          document.getElementById("priceChart").src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCAzMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PHBhdGggZD0iTTAgMTVDNSAxMCAxMCAyMCAxNSAxNUMyMCAxMCAyNSAyMCAzMCAxNUM0MCAxMCA1MCAyMCA2MCAxNUM3MCAxMCA3NSAyMCA4MCAxNSIgc3Ryb2tlPSIjZWEzOTQzIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4="
+        }
+        
+        // Update explorer link
+        document.getElementById("explorerLink").href = `https://explorer.solana.com/address/${currentUser[`${symbol.toLowerCase()}WalletAddress`]}`
+      }
+
+      function loadTokenTransactions(symbol) {
+        fetch("/api/transactions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Filter transactions for the selected token
+              const tokenTransactions = data.transactions.filter(
+                (tx) => tx.tokenType === symbol
+              )
+              
+              if (tokenTransactions.length > 0) {
+                // Show only the most recent 5 transactions
+                const recentTransactions = tokenTransactions.slice(0, 5)
+                renderTransactions(recentTransactions, symbol)
+              } else {
+                // Show no transactions message
+                document.getElementById("transactionHistory").innerHTML = `
+                  <div style="text-align: center; padding: 40px 0;">
+                    <p style="color: var(--text-secondary);">No ${symbol} transactions yet</p>
+                  </div>
+                `
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading transactions:", error)
+            
+            // Show error message
+            document.getElementById("transactionHistory").innerHTML = `
+              <div style="text-align: center; padding: 40px 0;">
+                <p style="color: var(--negative-color);">Failed to load transactions</p>
+              </div>
+            `
+          })
+      }
+
+      function renderTransactions(transactions, symbol) {
+        const transactionHistory = document.getElementById("transactionHistory")
+        transactionHistory.innerHTML = ""
+        
+        // Group transactions by date
+        const groupedTransactions = groupTransactionsByDate(transactions)
+        
+        // Render each group
+        Object.keys(groupedTransactions).forEach(date => {
+          // Add date header
+          const dateHeader = document.createElement("div")
+          dateHeader.className = "date-header"
+          dateHeader.textContent = date
+          transactionHistory.appendChild(dateHeader)
+          
+          // Add transactions for this date
+          groupedTransactions[date].forEach(tx => {
+            const transactionItem = createTransactionItem(tx, symbol)
+            transactionHistory.appendChild(transactionItem)
+          })
+        })
+      }
+
+      function groupTransactionsByDate(transactions) {
+        const groups = {}
+        
+        transactions.forEach(tx => {
+          const date = new Date(tx.createdAt)
+          const formattedDate = formatDate(date)
+          
+          if (!groups[formattedDate]) {
+            groups[formattedDate] = []
+          }
+          
+          groups[formattedDate].push(tx)
+        })
+        
+        return groups
+      }
+
+      function formatDate(date) {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        return `${months[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
+      }
+
+      function createTransactionItem(transaction, symbol) {
+        const div = document.createElement("div")
+        div.className = "transaction-item"
+        
+        const isReceived = transaction.type === "received" || transaction.type === "admin-funding"
+        const iconClass = isReceived ? "fa-arrow-down" : "fa-arrow-up"
+        const typeText = isReceived ? "Receive" : "Send"
+        
+        // Format amount with proper sign
+        let formattedAmount
+        if (isReceived) {
+          formattedAmount = transaction.amount === 0 ? `0 ${symbol}` : `+${transaction.amount} ${symbol}`
+        } else {
+          formattedAmount = `-${transaction.amount} ${symbol}`
+        }
+        
+        // Create address text
+        let addressText
+        if (isReceived) {
+          const fromAddress = transaction.fromAddress || "Unknown"
+          addressText = `From: ${formatAddress(fromAddress)}`
+        } else {
+          const toAddress = transaction.toAddress || "Unknown"
+          addressText = `To: ${formatAddress(toAddress)}`
+        }
+        
+        div.innerHTML = `
+          <div class="transaction-icon">
+            <i class="fas ${iconClass}"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-type">${typeText}</div>
+            <div class="transaction-address">${addressText}</div>
+          </div>
+          <div class="transaction-amount ${isReceived ? 'positive' : 'negative'}">${formattedAmount}</div>
+        `
+        
+        return div
+      }
+
+      function formatAddress(address) {
+        if (!address) return "Unknown"
+        if (address.length <= 16) return address
+        
+        const start = address.substring(0, 8)
+        const end = address.substring(address.length - 8)
+        return `${start}...${end}`
+      }
+
+      function setupActionButtons(symbol) {
+        // Send button
+        document.getElementById("sendBtn").href = `send.html?token=${symbol}`
+        
+        // Receive button
+        document.getElementById("receiveBtn").href = `receive.html?token=${symbol}`
+        
+        // Fund from Main button
+        document.getElementById("fundMainBtn").addEventListener("click", () => {
+          showFundFromMainModal(symbol)
+        })
+        
+        // Swap, Sell buttons
+        const actionButtons = ["swapBtn", "sellBtn"]
+        actionButtons.forEach(btnId => {
+          document.getElementById(btnId).addEventListener("click", () => {
+            alert(`${btnId.replace("Btn", "")} functionality coming soon!`)
+          })
+        })
+        
+        // View More link
+        document.getElementById("viewMoreLink").href = `transactions.html?token=${symbol}`
+      }
+
+      function showFundFromMainModal(symbol) {
+        // Create modal for funding from main wallet
+        const modal = document.createElement("div")
+        modal.className = "modal"
+        modal.style.display = "flex"
+        modal.style.position = "fixed"
+        modal.style.top = "0"
+        modal.style.left = "0"
+        modal.style.right = "0"
+        modal.style.bottom = "0"
+        modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
+        modal.style.zIndex = "1000"
+        modal.style.alignItems = "center"
+        modal.style.justifyContent = "center"
+        
+        const modalContent = document.createElement("div")
+        modalContent.style.width = "90%"
+        modalContent.style.maxWidth = "400px"
+        modalContent.style.backgroundColor = "white"
+        modalContent.style.borderRadius = "16px"
+        modalContent.style.overflow = "hidden"
+        
+        modalContent.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e4e7eb;">
+            <h3 style="font-size: 18px; font-weight: 600;">Fund ${symbol} from Main</h3>
+            <button id="closeModalBtn" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+          </div>
+          <div style="padding: 16px;">
+            <form id="fundFromMainForm">
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Amount</label>
+                <input type="number" id="fundAmount" style="width: 100%; padding: 16px; background-color: #f5f7fa; border: none; border-radius: 16px; font-size: 16px;" placeholder="0.00" step="0.000001" min="0" required>
+              </div>
+              
+              <div id="fundError" style="color: #ea3943; font-size: 14px; margin-top: 8px; min-height: 20px;"></div>
+              
+              <button type="submit" style="width: 100%; padding: 16px; background-color: #0052ff; color: white; border: none; border-radius: 16px; font-size: 16px; font-weight: 600; margin-top: 16px;">Fund</button>
+            </form>
+          </div>
+        `
+        
+        modal.appendChild(modalContent)
+        document.body.appendChild(modal)
+        
+        // Close modal button
+        document.getElementById("closeModalBtn").addEventListener("click", () => {
+          document.body.removeChild(modal)
+        })
+        
+        // Fund from main form submission
+        document.getElementById("fundFromMainForm").addEventListener("submit", (e) => {
+          e.preventDefault()
+          const amount = parseFloat(document.getElementById("fundAmount").value)
+          const errorElement = document.getElementById("fundError")
+          
+          // Clear previous error
+          errorElement.textContent = ""
+          
+          // Validate amount
+          if (isNaN(amount) || amount <= 0) {
+            errorElement.textContent = "Please enter a valid amount"
+            return
+          }
+          
+          // Check if user has enough balance in main wallet
+          if (amount > currentUser.balance) {
+            errorElement.textContent = "Insufficient balance in main wallet"
+            return
+          }
+          
+          // Make API request to fund token from main wallet
+          fetch("/api/transactions/fund-token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              tokenType: symbol,
+              amount: amount,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Update local balances
+                currentUser.balance -= amount
+                const balanceField = tokenData[symbol].balanceField
+                currentUser[balanceField] = (currentUser[balanceField] || 0) + amount
+                localStorage.setItem("currentUser", JSON.stringify(currentUser))
+                
+                // Close modal
+                document.body.removeChild(modal)
+                
+                // Show success message
+                alert(`Successfully funded ${amount} ${symbol} from main wallet`)
+                
+                // Refresh the page to show updated balance
+                window.location.reload()
+              } else {
+                errorElement.textContent = data.message || "Failed to fund wallet"
+              }
+            })
+            .catch((error) => {
+              errorElement.textContent = "An error occurred. Please try again."
+              console.error("Fund from main error:", error)
+            })
+        })
+        
+        // Close modal when clicking outside
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            document.body.removeChild(modal)
+          }
+        })
+      }
+    })
+  </script>
+</body>
+</html>
+

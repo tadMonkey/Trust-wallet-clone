@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trust Wallet</title>
+  <link rel="stylesheet" href="css/trust-wallet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Wallet Header -->
+    <div class="wallet-header">
+      <div class="header-left">
+        <button class="icon-button">
+          <i class="fas fa-qrcode"></i>
+        </button>
+        <button class="icon-button">
+          <i class="fas fa-expand"></i>
+        </button>
+      </div>
+      <div class="wallet-selector">
+        <span>Main Wallet</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="header-right">
+        <button class="icon-button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Balance Display -->
+    <div class="balance-container">
+      <h1 class="balance-amount" id="totalBalance">$0.00</h1>
+      <div class="balance-change positive">
+        <i class="fas fa-arrow-up"></i>
+        <span id="balanceChange">$0.00 (+0.00%)</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="send.html" class="action-button">
+        <div class="action-icon">
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <span>Send</span>
+      </a>
+      <a href="receive.html" class="action-button">
+        <div class="action-icon">
+          <i class="fas fa-qrcode"></i>
+        </div>
+        <span>Receive</span>
+      </a>
+      <a href="#" class="action-button highlight">
+        <div class="action-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <span>Buy</span>
+      </a>
+      <a href="#" class="action-button">
+        <div class="action-icon">
+          <i class="fas fa-university"></i>
+        </div>
+        <span>Sell</span>
+      </a>
+    </div>
+
+    <!-- Asset Tabs -->
+    <div class="asset-tabs">
+      <button class="tab-button active">Crypto</button>
+      <button class="tab-button">NFTs</button>
+      <div class="tab-actions">
+        <button class="sort-button">
+          <i class="fas fa-sliders-h"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Token List -->
+    <div class="token-list" id="tokenList">
+      <!-- Tokens will be dynamically loaded here -->
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Trending</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Swap</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script src="js/trust-wallet.js"></script>
+</body>
+</html>
+
